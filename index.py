@@ -3,7 +3,11 @@ import time
 from datetime import timedelta,date
 import os
 import collections
+import platform 
+_version = platform.python_version()
+# import xlrd
 
+# TODO 控制命令行下载 xlrd 包 根据当前环境控制
 def get_day_of_day(n=0):
     if(n<0):
         n = abs(n)
@@ -73,29 +77,49 @@ if os.path.exists('./setting.txt'):
 		if(item[0] in question):
 			question[item[0]] = item[1];
 	f.close()
-   	# read
-else:
-	f = open('./setting.txt', 'wr')
-	print 'daixie'
-	# touch
 
 print question
 
-firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
 questionMap = {
 	'name':'请输入你的名字:',
 	'companyName':'请输入你的公司名:',
 	'position':'请输入你的职位:'
 }
-
-if(firstSelect == 's'):
-	print '设置'
+def set():
 	for i in question:
 		ans = raw_input(questionMap[i])
 		question[i] = ans
-	print '已设置完毕'
-	
-else:
-	print '生成'
+
+
+def save():
+	with open("./setting.txt","w") as fs:
+		for i in question:
+			fs.write("%s:%s\n" % (i,question[i]))
+
+def checkSet():
+	for i in question:
+		if(question[i].strip() == ''):
+			return 'error'
+
+def run():
+	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
+	if(firstSelect == 's'):
+		set()
+		print '设置完毕'
+		save()
+		run()
+	elif(firstSelect == 'g'):
+		if(checkSet() == 'error'):
+			print '请先设置个人信息'
+			run() # TODO 后续优化 只需输入未填写的信息
+		else:
+			print '模板读取中.. 请确认当前文件夹下有 template.xlsx 文件'
+			data = xlrd.open_workbook('.template.xlsx')
+			print data
+	else:
+		print '请重新选择'
+		run()
+
+run()
 
 
