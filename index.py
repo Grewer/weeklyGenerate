@@ -5,9 +5,22 @@ import os
 import collections
 import platform 
 _version = platform.python_version()
-# import xlrd
 
-# TODO 控制命令行下载 xlrd 包 根据当前环境控制
+
+try:
+	import xlrd
+except:
+	try:
+		if(int(_version[:1])<3):
+			os.system("pip install xlrd")
+		else:
+			os.system("pip3 install xlrd")
+		
+		import xlrd
+	except:
+		print '请先安装pip'
+		exit(1)
+
 def get_day_of_day(n=0):
     if(n<0):
         n = abs(n)
@@ -61,10 +74,6 @@ weekOrderSet = sorted(thisWeek.keys(), date_compare)
 # print thisWeek
 
 
-# name = raw_input('请输入用户名：')
-# 第一次需要输入,后续读取文件
-
-
 question = collections.OrderedDict()
 question['name'] = ''
 question['companyName'] = ''
@@ -107,19 +116,17 @@ def run():
 		set()
 		print '设置完毕'
 		save()
-		run()
+		return run()
 	elif(firstSelect == 'g'):
 		if(checkSet() == 'error'):
 			print '请先设置个人信息'
-			run() # TODO 后续优化 只需输入未填写的信息
+			return run() # TODO 后续优化 只需输入未填写的信息
 		else:
 			print '模板读取中.. 请确认当前文件夹下有 template.xlsx 文件'
 			data = xlrd.open_workbook('.template.xlsx')
 			print data
 	else:
 		print '请重新选择'
-		run()
+		return run()
 
 run()
-
-
