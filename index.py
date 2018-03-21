@@ -15,7 +15,7 @@ except:
 			os.system("pip install xlrd")
 		else:
 			os.system("pip3 install xlrd")
-		
+
 		import xlrd
 	except:
 		print '请先安装pip'
@@ -123,8 +123,18 @@ def run():
 			return run() # TODO 后续优化 只需输入未填写的信息
 		else:
 			print '模板读取中.. 请确认当前文件夹下有 template.xlsx 文件'
-			data = xlrd.open_workbook('.template.xlsx')
-			print data
+			data = xlrd.open_workbook('./template.xlsx')
+			booksheet = data.sheet_by_index(0)  
+			print booksheet.name,booksheet.nrows,booksheet.ncols
+			# p = list() 
+
+			# for row in range(booksheet.nrows):  
+   #          	# row_data = []
+			# 	for col in range(booksheet.ncols):  
+			# 		cel = booksheet.cell(row, col)  
+			# 		val = cel.value 
+			# 		print '键:'+str(cel)+'值:'+str(val)
+
 	else:
 		print '请重新选择'
 		return run()
