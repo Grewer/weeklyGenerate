@@ -8,18 +8,23 @@ _version = platform.python_version()
 
 
 try:
-	import xlrd
+	import openpyxl
 except:
 	try:
 		if(int(_version[:1])<3):
-			os.system("pip install xlrd")
+			os.system("pip install openpyxl")
 		else:
-			os.system("pip3 install xlrd")
+			os.system("pip3 install openpyxl")
 
-		import xlrd
+		import openpyxl
 	except:
-		print '请先安装pip'
+		print '请先安装pip,或手动安装openpyxl'
 		exit(1)
+
+from openpyxl import Workbook
+from openpyxl import load_workbook
+from openpyxl.compat import range
+from openpyxl.utils import get_column_letter
 
 def get_day_of_day(n=0):
     if(n<0):
@@ -110,6 +115,12 @@ def checkSet():
 		if(question[i].strip() == ''):
 			return 'error'
 
+
+def readFile():
+	wb = load_workbook('./template.xlsx')
+	sheet = wb.active 
+	print sheet
+
 def run():
 	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
 	if(firstSelect == 's'):
@@ -123,15 +134,22 @@ def run():
 			return run() # TODO 后续优化 只需输入未填写的信息
 		else:
 			print '模板读取中.. 请确认当前文件夹下有 template.xlsx 文件'
-			data = xlrd.open_workbook('./template.xlsx')
-			booksheet = data.sheet_by_index(0)  
-			print booksheet.name,booksheet.nrows,booksheet.ncols
+			readFile()
 			# p = list() 
-
-			# for row in range(booksheet.nrows):  
+			# for row in range(sheet.nrows):
+			# 	for col in range(sheet.ncols):
+			# 		try:
+			# 			if(sheet.cell(row,col).value.strip() == ''):
+			# 				print 'null'
+			# 			else:
+			# 				print sheet.cell(row,col).value
+			# 		except:
+			# 			print 'number'
+			# 			print sheet.cell(row,col).value
+			# for row in range(sheet.nrows):  
    #          	# row_data = []
-			# 	for col in range(booksheet.ncols):  
-			# 		cel = booksheet.cell(row, col)  
+			# 	for col in range(sheet.ncols):  
+			# 		cel = sheet.cell(row, col)  
 			# 		val = cel.value 
 			# 		print '键:'+str(cel)+'值:'+str(val)
 
