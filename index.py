@@ -23,9 +23,9 @@ except:
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
-from openpyxl.compat import range
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import NamedStyle, Font, Border, Side
 
+import copy
 def get_day_of_day(n=0):
     if(n<0):
         n = abs(n)
@@ -118,8 +118,14 @@ def checkSet():
 
 def readFile():
 	wb = load_workbook('./template.xlsx')
-	sheet = wb.active 
-	print sheet
+	oldSheet = wb['Sheet1']
+	oldSheet.title = 'template'
+	# wb.create_sheet('fork',0)
+	# newSheet = wb['fork']
+	# print newSheet
+
+	
+	wb.save('output/gg.xlsx')
 
 def run():
 	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
