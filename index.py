@@ -24,8 +24,9 @@ except:
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import NamedStyle, Font, Border, Side
+from copy import copy
 
-import copy
+
 def get_day_of_day(n=0):
     if(n<0):
         n = abs(n)
@@ -99,6 +100,12 @@ questionMap = {
 	'companyName':'请输入你的公司名:',
 	'position':'请输入你的职位:'
 }
+
+
+rules = {
+	
+}
+
 def set():
 	for i in question:
 		ans = raw_input(questionMap[i])
@@ -116,16 +123,65 @@ def checkSet():
 			return 'error'
 
 
+def outFileName():
+	return '%s-%s月第X周周报' % (question['name'],date.today().month)
+
+
+highlight = NamedStyle(name="highlight")
+highlight.font = Font(bold=True, size=16)
+bd = Side(style='thick', color="dddddd")
+
 def readFile():
 	wb = load_workbook('./template.xlsx')
+	# TODO 检测是否存在文件
 	oldSheet = wb['Sheet1']
-	oldSheet.title = 'template'
-	# wb.create_sheet('fork',0)
-	# newSheet = wb['fork']
+	wb.create_sheet('fork',0)
+	newSheet = wb['fork']
 	# print newSheet
-
 	
-	wb.save('output/gg.xlsx')
+	rows = oldSheet.max_row
+	cols = oldSheet.max_column
+
+	print rows,cols
+	for row in range(rows):
+		for col in range(cols):
+			if(row == 0 or col == 0):
+				continue
+			print dir(oldSheet.cell(row,col).fill)
+			print oldSheet.cell(row,col).fill.bgColor
+	# for row in oldSheet.rows:
+	# 	for cell in row:
+	# 		if(cell.value == ''):
+	# 			continue
+			# fill = copy(cell.fill)
+			# border = copy(cell.border)
+			# font = copy(cell.font)
+			# alignment = copy(cell.alignment)
+
+			# print dir(cell.style)
+			# print dir(cell.fill)
+			# print dir(cell.font)
+			# cell.fill.copy()
+			#
+			# print cell.fill.bgColor
+			# print cell.font.color
+			# cell.border = border
+			# cell.font = font
+			# cell.alignment = alignment
+			# print cell.fill
+			# print cell.border
+			# print cell.font
+			# print cell.alignment
+			
+
+
+			# print cell.value
+			# print cell.style
+
+
+	print '文档生成中..'
+	wb.save('output/%s.xlsx' % (outFileName()))
+	print '文档生成完毕,请在 output 查看'
 
 def run():
 	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
@@ -139,7 +195,7 @@ def run():
 			print '请先设置个人信息'
 			return run() # TODO 后续优化 只需输入未填写的信息
 		else:
-			print '模板读取中.. 请确认当前文件夹下有 template.xlsx 文件'
+			print '模板读取中..'
 			readFile()
 			# p = list() 
 			# for row in range(sheet.nrows):
