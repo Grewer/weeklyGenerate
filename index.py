@@ -4,7 +4,11 @@ from datetime import timedelta,date
 import os
 import collections
 import platform 
+import re
 _version = platform.python_version()
+
+
+
 
 
 try:
@@ -122,37 +126,74 @@ def checkSet():
 		if(question[i].strip() == ''):
 			return 'error'
 
+def getTheWeek():
+	if date.today().day<10:
+		return 1
+	elif date.today().day<21:
+		return 2
+	elif date.today().day<28:
+		return 3
+	else:
+		return 4
 
 def outFileName():
-	return '%s-%s月第X周周报' % (question['name'],date.today().month)
+	return '%s-%s月第%s周周报' % (question['name'],date.today().month,getTheWeek())
 
 
 highlight = NamedStyle(name="highlight")
 highlight.font = Font(bold=True, size=16)
 bd = Side(style='thick', color="dddddd")
 
+
+
+def replace(pos,str):
+	# print pos[0],pos[1]
+	rep = str[pos[0]+1:pos[1]-1]
+	if rep in question:
+		return '%s%s%s' % (str[:pos[0]],question[rep],str[pos[1]:])
+	else:
+		# TODO 
+		return 'null'
+
+def search(str):
+	result = re.search('{\w+}',str)
+	if result == None:
+		return True
+	pos = result.span()
+	return replace(pos,str)
+	# print 
+
+
+# search('职位：{position}')
+
 def readFile():
 	wb = load_workbook('./template.xlsx')
 	# TODO 检测是否存在文件
 	oldSheet = wb['Sheet1']
-	wb.create_sheet('fork',0)
-	newSheet = wb['fork']
+	# wb.create_sheet('fork',0)
+	# newSheet = wb['fork']
 	# print newSheet
-	
-	rows = oldSheet.max_row
-	cols = oldSheet.max_column
+	#  TODO 样式问题待解决
+	# rows = oldSheet.max_row
+	# cols = oldSheet.max_column
 
-	print rows,cols
-	for row in range(rows):
-		for col in range(cols):
-			if(row == 0 or col == 0):
-				continue
-			print dir(oldSheet.cell(row,col).fill)
-			print oldSheet.cell(row,col).fill.bgColor
-	# for row in oldSheet.rows:
-	# 	for cell in row:
-	# 		if(cell.value == ''):
+	# print rows,cols
+	# for row in range(rows):
+	# 	for col in range(cols):
+	# 		if(row == 0 or col == 0):
 	# 			continue
+	# 		print dir(oldSheet.cell(row,col).fill)
+	# 		print oldSheet.cell(row,col).fill.bgColor
+	for row in oldSheet.rows:
+		for cell in row:
+			if cell.value == '' or cell.value == None:
+				continue
+			if isinstance(cell.value,basestring) == True:
+				print 'run'
+				if '{' in cell.value:
+					cell.value = search(cell.value)
+					print cell.value
+			# print cell.value
 			# fill = copy(cell.fill)
 			# border = copy(cell.border)
 			# font = copy(cell.font)
@@ -172,9 +213,6 @@ def readFile():
 			# print cell.border
 			# print cell.font
 			# print cell.alignment
-			
-
-
 			# print cell.value
 			# print cell.style
 
