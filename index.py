@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+
 import time
 from datetime import timedelta,date
 import os
@@ -6,6 +7,7 @@ import collections
 import platform 
 import re
 _version = platform.python_version()
+import json
 
 
 
@@ -103,10 +105,16 @@ questionMap = {
 	'position':'请输入你的职位:'
 }
 
+rules = {}
 
-rules = {
-	
+with open("./rules.txt","r") as fs:
+	content = fs.read()  
+	rules = json.loads(content)
+	# print text['maindo1']
+timeList = {
+	'month':str(date.today().month)
 }
+
 
 def set():
 	for i in question:
@@ -143,39 +151,38 @@ def replace(pos,str):
 	rep = str[pos[0]+1:pos[1]-1]
 	if rep in question:
 		return '%s%s%s' % (str[:pos[0]],question[rep],str[pos[1]:])
+	elif rep in rules:
+		return raw_input(rules[rep].encode('utf-8')+':')
+	elif rep in timeList:
+		return '%s%s%s' % (str[:pos[0]],timeList[rep],str[pos[1]:])
 	else:
-		# TODO 
-		return 'null'
+		return ''
+
 
 def search(str):
 	result = re.search('{\w+}',str)
 	if result == None:
-		return True
+		return str
 	pos = result.span()
-	return replace(pos,str)
-	# print 
+	afterRep = replace(pos,str)
+	return search(afterRep)
+ 
 
-
-# search('职位：{position}')
 
 def readFile():
 	wb = load_workbook('./template.xlsx')
 	# TODO 检测是否存在文件
 	oldSheet = wb['Sheet1']
-	font = Font(color="000000",size=12)
 	thin = Side(border_style="thin", color="000000")
 	fill = PatternFill("solid", fgColor="ffffff")
 	border = Border(top=thin, left=thin, right=thin, bottom=thin)
+	
 	for row in oldSheet.rows:
 		for cell in row:
-			cell.font = font
 			cell.border = border
 			cell.fill = fill
 			if cell.value == '' or cell.value == None:
 				continue
-
-			print cell.border
-
 			if isinstance(cell.value,basestring) == True:
 				print 'run'
 				if '{' in cell.value:
@@ -201,24 +208,6 @@ def run():
 		else:
 			print '模板读取中..'
 			readFile()
-			# p = list() 
-			# for row in range(sheet.nrows):
-			# 	for col in range(sheet.ncols):
-			# 		try:
-			# 			if(sheet.cell(row,col).value.strip() == ''):
-			# 				print 'null'
-			# 			else:
-			# 				print sheet.cell(row,col).value
-			# 		except:
-			# 			print 'number'
-			# 			print sheet.cell(row,col).value
-			# for row in range(sheet.nrows):  
-   #          	# row_data = []
-			# 	for col in range(sheet.ncols):  
-			# 		cel = sheet.cell(row, col)  
-			# 		val = cel.value 
-			# 		print '键:'+str(cel)+'值:'+str(val)
-
 	else:
 		print '请重新选择'
 		return run()
