@@ -9,8 +9,6 @@ _version = platform.python_version()
 
 
 
-
-
 try:
 	import openpyxl
 except:
@@ -22,12 +20,12 @@ except:
 
 		import openpyxl
 	except:
-		print '请先安装pip,或手动安装openpyxl'
+		print '请先安装pip,openpyxl'
 		exit(1)
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
-from openpyxl.styles import NamedStyle, Font, Border, Side
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
 from copy import copy
 
 
@@ -140,12 +138,6 @@ def outFileName():
 	return '%s-%s月第%s周周报' % (question['name'],date.today().month,getTheWeek())
 
 
-highlight = NamedStyle(name="highlight")
-highlight.font = Font(bold=True, size=16)
-bd = Side(style='thick', color="dddddd")
-
-
-
 def replace(pos,str):
 	# print pos[0],pos[1]
 	rep = str[pos[0]+1:pos[1]-1]
@@ -170,56 +162,30 @@ def readFile():
 	wb = load_workbook('./template.xlsx')
 	# TODO 检测是否存在文件
 	oldSheet = wb['Sheet1']
-	# wb.create_sheet('fork',0)
-	# newSheet = wb['fork']
-	# print newSheet
-	#  TODO 样式问题待解决
-	# rows = oldSheet.max_row
-	# cols = oldSheet.max_column
-
-	# print rows,cols
-	# for row in range(rows):
-	# 	for col in range(cols):
-	# 		if(row == 0 or col == 0):
-	# 			continue
-	# 		print dir(oldSheet.cell(row,col).fill)
-	# 		print oldSheet.cell(row,col).fill.bgColor
+	font = Font(color="000000",size=12)
+	thin = Side(border_style="thin", color="000000")
+	fill = PatternFill("solid", fgColor="ffffff")
+	border = Border(top=thin, left=thin, right=thin, bottom=thin)
 	for row in oldSheet.rows:
 		for cell in row:
+			cell.font = font
+			cell.border = border
+			cell.fill = fill
 			if cell.value == '' or cell.value == None:
 				continue
+
+			print cell.border
+
 			if isinstance(cell.value,basestring) == True:
 				print 'run'
 				if '{' in cell.value:
 					cell.value = search(cell.value)
-					print cell.value
-			# print cell.value
-			# fill = copy(cell.fill)
-			# border = copy(cell.border)
-			# font = copy(cell.font)
-			# alignment = copy(cell.alignment)
-
-			# print dir(cell.style)
-			# print dir(cell.fill)
-			# print dir(cell.font)
-			# cell.fill.copy()
-			#
-			# print cell.fill.bgColor
-			# print cell.font.color
-			# cell.border = border
-			# cell.font = font
-			# cell.alignment = alignment
-			# print cell.fill
-			# print cell.border
-			# print cell.font
-			# print cell.alignment
-			# print cell.value
-			# print cell.style
 
 
 	print '文档生成中..'
 	wb.save('output/%s.xlsx' % (outFileName()))
 	print '文档生成完毕,请在 output 查看'
+
 
 def run():
 	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
