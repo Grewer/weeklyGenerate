@@ -33,6 +33,9 @@ from copy import copy
 
 timeList = GTime.outTime()
 
+print timeList
+exit(1)
+
 question = collections.OrderedDict()
 question['name'] = ''
 question['companyName'] = ''
