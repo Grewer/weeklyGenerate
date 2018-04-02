@@ -3,6 +3,7 @@ import time
 from datetime import timedelta,date
 import collections
 
+
 def get_day_of_day(n=0):
     if(n<0):
         n = abs(n)
@@ -43,9 +44,6 @@ def addNextTime():
 
 addNextTime()
 
-print 'nextWeek:',nextWeek
-# print nextWeek
-
 def date_compare(item1, item2):
     t1 = time.mktime(time.strptime(item1, '%Y-%m-%d'))
     t2 = time.mktime(time.strptime(item2, '%Y-%m-%d'))
@@ -70,19 +68,28 @@ def splitDay(day):
 timeList['thisWeekStr'] = '%s-%s' % (splitDay(weekOrderSet[0]),splitDay(weekOrderSet[-1]))
 
 
-for index,day in enumerate(weekOrderSet):
-	m = {0:'Mon',1:'Tues',2:'Wed',3:'Thur',4:'Fri'}[index]
-
-	print m
-	
-# 待优化 成一个函数 可以删除排序
-
-
-timeList['thisWeek'] = {'test':1}
+WeekMapSet = {
+	'Mon':'一',
+	'Tues':'二',
+	'Wed':'三',
+	'Thur':'四',
+	'Fri':'五'
+}
 
 
-print 'timeList:',timeList
+def getWeekMap(weekSet):
+	midSet = {}
+	for day in weekSet:
+		m = {'1':'Mon','2':'Tues','3':'Wed','4':'Thur','5':'Fri'}[weekSet[day]]
+		midSet[m] = '星期'+WeekMapSet[m]
+		midSet[m+'Date'] = day
+	return midSet
+
+
+timeList['thisWeek'] = getWeekMap(thisWeek)
+timeList['nextWeek'] = getWeekMap(nextWeek)
+
+print timeList
 
 def outTime():
-	print 'time.py outTime func'
 	return timeList
