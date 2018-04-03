@@ -122,7 +122,7 @@ def replace(pos,str):
 		return '{'+rep+'}'
 
 def search(str):
-	result = re.search('{\w+}',str)
+	result = re.search('{[\.|\w]+}',str)
 	# 添加.的正则
 	if result == None:
 		return str
