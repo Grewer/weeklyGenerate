@@ -103,18 +103,12 @@ def replace(pos,str):
 	elif rep in rules:
 		return raw_input(rules[rep].encode('utf-8')+':')
 	elif rep in timeList:
-		print rep
 		try:
 			return '%s%s%s' % (str[:pos[0]],timeList[rep],str[pos[1]:])
-			# error TODO
 		except:
-			print 'err'
-			return 'err'
-			# return '%s%s%s' % (str[:pos[0]],timeList[rep].encode('utf-8'),str[pos[1]:])
+			return '%s%s%s' % (str[:pos[0]],timeList[rep].decode('utf-8'),str[pos[1]:])
 	elif '.' in rep:
-		#TODO  not enter ?
 		index = rep.index('.')
-		print index
 		prefix = rep[:index]
 		if prefix in timeList:
 			return timeList[prefix][rep[index+1:]]
@@ -123,7 +117,6 @@ def replace(pos,str):
 
 def search(str):
 	result = re.search('{[\.|\w]+}',str)
-	# 添加.的正则
 	if result == None:
 		return str
 	pos = result.span()
