@@ -89,7 +89,6 @@ def getWeekMap(weekSet):
 timeList['thisWeek'] = getWeekMap(thisWeek)
 timeList['nextWeek'] = getWeekMap(nextWeek)
 
-print timeList
 
 def outTime():
 	return timeList

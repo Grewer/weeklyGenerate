@@ -33,8 +33,6 @@ from copy import copy
 
 timeList = GTime.outTime()
 
-# print timeList
-# exit(1)
 
 question = collections.OrderedDict()
 question['name'] = ''
@@ -49,7 +47,6 @@ if os.path.exists('./setting.txt'):
 			question[item[0]] = item[1];
 	f.close()
 
-print question
 
 questionMap = {
 	'name':'请输入你的名字:',
@@ -59,9 +56,13 @@ questionMap = {
 
 rules = {}
 
-with open("./rules.txt","r") as fs:
-	content = fs.read()  
-	rules = json.loads(content)
+try:
+	with open("./rules.txt","r") as fs:
+		content = fs.read()  
+		rules = json.loads(content)
+except:
+	print '请确认当前文件夹下有rules文件'
+	exit(1)
 
 
 
@@ -97,11 +98,13 @@ def outFileName():
 
 def replace(pos,str):
 	rep = str[pos[0]+1:pos[1]-1]
-	print rep
 	if rep in question:
 		return '%s%s%s' % (str[:pos[0]],question[rep],str[pos[1]:])
 	elif rep in rules:
-		return raw_input(rules[rep].encode('utf-8')+':')
+		if rep == 'summer':
+			return '本周工作总结:'+raw_input(rules[rep].encode('utf-8')+':')
+		else:
+			return raw_input(rules[rep].encode('utf-8')+':')
 	elif rep in timeList:
 		try:
 			return '%s%s%s' % (str[:pos[0]],timeList[rep],str[pos[1]:])
@@ -126,8 +129,11 @@ def search(str):
 
 
 def readFile():
-	wb = load_workbook('./template.xlsx')
-	# TODO 检测是否存在文件
+	try:
+		wb = load_workbook('./template.xlsx')
+	except:
+		print '请确认当前文件夹下有模板文件'
+		exit(1)
 	oldSheet = wb['Sheet1']
 	thin = Side(border_style="thin", color="000000")
 	fill = PatternFill("solid", fgColor="ffffff")
@@ -140,7 +146,7 @@ def readFile():
 			if cell.value == '' or cell.value == None:
 				continue
 			if isinstance(cell.value,basestring) == True:
-				print 'run'
+				# print 'run'
 				if '{' in cell.value:
 					cell.value = search(cell.value)
 

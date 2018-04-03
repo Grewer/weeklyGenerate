@@ -4,6 +4,16 @@
     "maindo3":"本周完成主要工作3",
     "maintodo1":"下周工作注意事项1",
     "maintodo2":"下周工作注意事项2",
-    "maintodo3":"下周工作注意事项3"
-
+    "maintodo3":"下周工作注意事项3",
+    "thisWeekdo1":"本周一工作内容",
+    "thisWeekdo2":"本周二工作内容",
+    "thisWeekdo3":"本周三工作内容",
+    "thisWeekdo4":"本周四工作内容",
+    "thisWeekdo5":"本周五工作内容",
+    "nextWeekdo1":"下周一工作内容",
+    "nextWeekdo2":"下周二工作内容",
+    "nextWeekdo3":"下周三工作内容",
+    "nextWeekdo4":"下周四工作内容",
+    "nextWeekdo5":"下周五工作内容",
+    "summer":"本周工作总结"
 }
