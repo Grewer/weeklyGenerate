@@ -1,7 +1,5 @@
 ## 周报生成器
 
-开发中..  
-In development  
 
 ### before run
 1. 确保有权限读写文件
@@ -20,3 +18,5 @@ sudo -H python index.py
 - mac numbers 
     - 点开模板  点击格式   点击拷贝样式 
     - 打开输出文件  点击格式  点击粘贴样式
+
+version 1.0
