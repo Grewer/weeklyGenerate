@@ -83,11 +83,11 @@ def checkSet():
 			return 'error'
 
 def getTheWeek():
-	if date.today().day<10:
+	if date.today().day<13:
 		return 1
-	elif date.today().day<21:
+	elif date.today().day<20:
 		return 2
-	elif date.today().day<28:
+	elif date.today().day<27:
 		return 3
 	else:
 		return 4
@@ -99,7 +99,7 @@ def outFileName():
 def replace(pos,str):
 	rep = str[pos[0]+1:pos[1]-1]
 	if rep in question:
-		return '%s%s%s' % (str[:pos[0]],question[rep],str[pos[1]:])
+		return '%s%s%s' % (str[:pos[0]],question[rep].decode('utf-8'),str[pos[1]:])
 	elif rep in rules:
 		if rep == 'summer':
 			return '本周工作总结:'+raw_input(rules[rep].encode('utf-8')+':')
