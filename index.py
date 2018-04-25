@@ -11,11 +11,6 @@ import GTime
 
 currentPyVersion = int(_version[:1])
 
-def getInput(msg):
-	if currentPyVersion<3:
-		return raw_input(msg);
-	else:
-		return input(msg);
 
 try:
 	import openpyxl
@@ -31,6 +26,23 @@ except:
 		print '请先安装pip,openpyxl'
 		exit(1)
 
+
+try:
+	import readline
+except:
+	try:
+		if(currentPyVersion<3):
+			os.system("pip install readline")
+		else:
+			os.system("pip3 install readline")
+
+		import readline
+	except:
+		print 'readline'
+		exit(1)
+
+
+
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
@@ -38,6 +50,8 @@ from copy import copy
 
 
 timeList = GTime.outTime()
+
+
 
 
 question = collections.OrderedDict()
@@ -70,6 +84,13 @@ except:
 	print '请确认当前文件夹下有rules文件'
 	exit(1)
 
+
+
+def getInput(msg):
+	if currentPyVersion<3:
+		return raw_input(msg);
+	else:
+		return input(msg);
 
 
 def set():
