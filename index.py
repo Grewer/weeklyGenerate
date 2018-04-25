@@ -9,13 +9,19 @@ import json
 from datetime import date
 import GTime
 
+currentPyVersion = int(_version[:1])
 
+def getInput(msg):
+	if currentPyVersion<3:
+		return raw_input(msg);
+	else:
+		return input(msg);
 
 try:
 	import openpyxl
 except:
 	try:
-		if(int(_version[:1])<3):
+		if(currentPyVersion<3):
 			os.system("pip install openpyxl")
 		else:
 			os.system("pip3 install openpyxl")
@@ -68,7 +74,7 @@ except:
 
 def set():
 	for i in question:
-		ans = raw_input(questionMap[i])
+		ans = getInput(questionMap[i])
 		question[i] = ans
 
 
@@ -102,9 +108,9 @@ def replace(pos,str):
 		return '%s%s%s' % (str[:pos[0]],question[rep].decode('utf-8'),str[pos[1]:])
 	elif rep in rules:
 		if rep == 'summer':
-			return '本周工作总结:'+raw_input(rules[rep].encode('utf-8')+':')
+			return '本周工作总结:'+getInput(rules[rep].encode('utf-8')+':')
 		else:
-			return raw_input(rules[rep].encode('utf-8')+':')
+			return getInput(rules[rep].encode('utf-8')+':')
 	elif rep in timeList:
 		try:
 			return '%s%s%s' % (str[:pos[0]],timeList[rep],str[pos[1]:])
@@ -157,7 +163,7 @@ def readFile():
 
 
 def run():
-	firstSelect = raw_input('请选择要做的事(s:设置, g:开始生成周报):')
+	firstSelect = getInput('请选择要做的事(s:设置, g:开始生成周报):').strip()
 	if(firstSelect == 's'):
 		set()
 		print '设置完毕'
