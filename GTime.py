@@ -4,14 +4,35 @@ from datetime import timedelta,date
 import collections
 
 
-def get_day_of_day(n=0):
-    if(n<0):
-        n = abs(n)
-        return date.today()-timedelta(days=n)
-    else:
-        return date.today()+timedelta(days=n)
+todayWeek = date.today().strftime('%w') # 今天是周几  0:周末 1:周一 ... 6:周六
 
-todayWeek = date.today().strftime('%w')
+friday = None
+
+def get_day_of_day(n=0):
+	if(not friday is None):
+		today = friday
+	else:
+		today = date.today()
+
+	if(n<0):
+		n = abs(n)
+		return today-timedelta(days=n)
+	else:
+		return today+timedelta(days=n)
+
+
+if(int(todayWeek)>=5 or todayWeek == '0'):
+	# 周末或周五周6️六
+	if todayWeek == '5':
+		friday = date.today()
+	elif todayWeek == '0':
+		friday = get_day_of_day(-2)
+	else:
+		friday = get_day_of_day(-1)
+	todayWeek = '5'
+else:
+	print '请在周末或周五使用'
+	exit(1)
 
 thisWeek = {}
 
@@ -28,7 +49,7 @@ def addWeek(offset):
 afterOffset = 5 - int(todayWeek) 
 beforeOffet = 1 - int(todayWeek) 
 
-thisWeek[date.today().strftime('%Y-%m-%d')] = todayWeek #今天
+thisWeek[friday.strftime('%Y-%m-%d')] = todayWeek #今天
 
 addWeek(afterOffset)
 addWeek(beforeOffet)
@@ -58,7 +79,7 @@ weekOrderSet = sorted(thisWeek.keys(), date_compare)
 
 
 timeList = {
-	'month':str(date.today().month)
+	'month':str(friday.month)
 }
 
 def splitDay(day):

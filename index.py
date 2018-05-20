@@ -8,7 +8,7 @@ _version = platform.python_version()
 import json
 from datetime import date
 import GTime
-
+from GTime import friday
 currentPyVersion = int(_version[:1])
 
 
@@ -110,17 +110,17 @@ def checkSet():
 			return 'error'
 
 def getTheWeek():
-	if date.today().day<13:
+	if friday.day<13:
 		return 1
-	elif date.today().day<20:
+	elif friday.day<20:
 		return 2
-	elif date.today().day<27:
+	elif friday.day<27:
 		return 3
 	else:
 		return 4
 
 def outFileName():
-	return '%s-%s月第%s周周报' % (question['name'],date.today().month,getTheWeek())
+	return '%s-%s月第%s周周报' % (question['name'],friday.month,getTheWeek())
 
 
 def replace(pos,str):
